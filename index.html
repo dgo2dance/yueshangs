@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>夜上 - 月光下的诗意场景</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 星空背景动画 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* 月亮 */
+        .moon {
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 30% 30%, #fff 0%, #f0f0f0 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            z-index: 1;
+            animation: moonGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes moonGlow {
+            0% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); }
+            100% { box-shadow: 0 0 50px rgba(255, 255, 255, 0.6); }
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 头部 */
+        header {
+            text-align: center;
+            padding: 100px 0 50px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #a8c8ec, #ffffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes titleShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a8c8ec;
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+
+        /* 场景卡片 */
+        .scenes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .scene-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scene-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .scene-card:hover::before {
+            left: 100%;
+        }
+
+        .scene-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(168, 200, 236, 0.3);
+        }
+
+        .scene-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .scene-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #a8c8ec;
+        }
+
+        .scene-description {
+            color: #cccccc;
+            line-height: 1.8;
+        }
+
+        /* 诗词区域 */
+        .poetry-section {
+            text-align: center;
+            margin: 80px 0;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .poetry-title {
+            font-size: 2rem;
+            color: #a8c8ec;
+            margin-bottom: 30px;
+        }
+
+        .poetry-content {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: #ffffff;
+            font-style: italic;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .poetry-author {
+            margin-top: 30px;
+            color: #a8c8ec;
+            font-size: 1rem;
+        }
+
+        /* 底部 */
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            color: #888;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 80px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .scenes-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .scene-card {
+                padding: 20px;
+            }
+            
+            .poetry-section {
+                padding: 40px 20px;
+            }
+            
+            .poetry-content {
+                font-size: 1.1rem;
+            }
+            
+            .moon {
+                width: 60px;
+                height: 60px;
+                top: 5%;
+                right: 5%;
+            }
+        }
+
+        /* 滚动动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- 月亮 -->
+    <div class="moon"></div>
+
+    <div class="container">
+        <!-- 头部 -->
+        <header>
+            <h1 class="title">夜上</h1>
+            <p class="subtitle">月光如水，夜色如诗，探寻夜晚的无限魅力</p>
+        </header>
+
+        <!-- 场景介绍 -->
+        <section class="scenes-grid">
+            <div class="scene-card fade-in">
+                <span class="scene-icon">🌙</span>
+                <h3 class="scene-title">月夜漫步</h3>
+                <p class="scene-description">
+                    在银色月光的照耀下，踏着轻柔的步伐穿行于静谧的小径。月影斑驳，树影摇曳，每一步都踏在诗意的韵律中。夜风轻抚，带来远方花香，让心灵在这宁静中得到净化。
+                </p>
+            </div>
+
+            <div class="scene-card fade-in">
+                <span class="scene-icon">✨</span>
+                <h3 class="scene-title">星空对话</h3>
+                <p class="scene-description">
+                    仰望浩瀚星空，与千万光年外的星辰进行无声的对话。每一颗星都承载着古老的故事，在这深邃的夜空中，时间仿佛静止，思绪可以自由翱翔于宇宙的边际。
+                </p>
+            </div>
+
+            <div class="scene-card fade-in">
+                <span class="scene-icon">🏮</span>
+                <h3 class="scene-title">灯火阑珊</h3>
+                <p class="scene-description">
+                    古街深巷中，红灯笼摇曳生辉，温暖的光芒穿透夜的帷幕。石板路上倒映着点点灯火，仿佛走进了千年前的诗词画卷，感受着传统文化的深厚底蕴。
+                </p>
+            </div>
+
+            <div class="scene-card fade-in">
+                <span class="scene-icon">🌸</span>
+                <h3 class="scene-title">夜樱飞舞</h3>
+                <p class="scene-description">
+                    春夜里，樱花在月光下绽放，花瓣如雪花般飘洒。微风过处，粉色的花雨纷纷扬扬，营造出如梦似幻的浪漫氛围，让人沉醉在这短暂而美好的春夜时光中。
+                </p>
+            </div>
+
+            <div class="scene-card fade-in">
+                <span class="scene-icon">🌊</span>
+                <h3 class="scene-title">夜潮听涛</h3>
+                <p class="scene-description">
+                    海边的夜晚，月光在波浪上跳跃，潮水轻拍着岸边的礁石。海风带着咸湿的气息，伴随着有节奏的涛声，构成了大自然最动人的夜曲，让心灵回归宁静。
+                </p>
+            </div>
+
+            <div class="scene-card fade-in">
+                <span class="scene-icon">🍃</span>
+                <h3 class="scene-title">竹林夜语</h3>
+                <p class="scene-description">
+                    竹林深处，月光透过竹叶洒下斑驳的光影。竹叶沙沙作响，仿佛在诉说着古老的秘密。在这绿色的天然屏障中，远离尘嚣，享受着最纯粹的宁静时光。
+                </p>
+            </div>
+        </section>
+
+        <!-- 诗词欣赏 -->
+        <section class="poetry-section fade-in">
+            <h2 class="poetry-title">夜上诗韵</h2>
+            <div class="poetry-content">
+                "月上柳梢头，人约黄昏后。"<br>
+                "今夜月明人尽望，不知秋思落谁家。"<br>
+                "举杯邀明月，对影成三人。"<br>
+                "床前明月光，疑是地上霜。"
+            </div>
+            <p class="poetry-author">—— 古人咏月佳句</p>
+        </section>
+    </div>
+
+    <!-- 底部 -->
+    <footer>
+        <p>&copy; 2025 夜上场景介绍 | 感受夜晚的诗意与美好</p>
+    </footer>
+
+    <script>
+        // 创建星空
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 滚动动画
+        function handleScrollAnimation() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            handleScrollAnimation();
+            
+            window.addEventListener('scroll', handleScrollAnimation);
+        });
+
+        // 鼠标移动效果
+        document.addEventListener('mousemove', function(e) {
+            const moon = document.querySelector('.moon');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            moon.style.transform = `translate(${x * 10}px, ${y * 10}px)`;
+        });
+    </script>
+</body>
+</html>
